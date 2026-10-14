@@ -12,8 +12,8 @@ class SharedUser(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        verbose_name = 'HRMS User Account'
+        verbose_name_plural = 'HRMS User Accounts'
 
     def __str__(self):
         return f"{self.email} ({self.role})"

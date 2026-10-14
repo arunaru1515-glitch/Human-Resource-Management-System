@@ -13,6 +13,20 @@ from .models import (
     SharedNotification,
 )
 
+from django.contrib.auth.models import Group
+
+try:
+    admin.site.unregister(Group)
+except Exception:
+    pass
+
+@admin.register(SharedUser)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('email', 'role', 'is_active', 'created_at')
+    list_filter = ('role', 'is_active', 'created_at')
+    search_fields = ('email',)
+    readonly_fields = ('created_at', 'updated_at', 'hashed_password')
+
 class DocumentInline(admin.TabularInline):
     model = SharedEmployeeDocument
     extra = 0

@@ -45,6 +45,7 @@ def list_salary_slips(
             year=s.payroll.year,
             file_name=s.file_name,
             file_path=s.file_path,
+            net_salary=s.payroll.net_salary if s.payroll else 0.0,
             download_count=s.download_count,
             generated_at=s.generated_at
         ))

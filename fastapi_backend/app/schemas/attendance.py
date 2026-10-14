@@ -25,7 +25,10 @@ class AttendanceResponse(BaseModel):
     date: date
     check_in_time: Optional[datetime] = None
     check_out_time: Optional[datetime] = None
-    working_hours: float
+    check_in: Optional[str] = None
+    check_out: Optional[str] = None
+    working_hours: float = 0.0
+    total_hours: Optional[float] = 0.0
     status: AttendanceStatus
     is_override: bool
     override_reason: Optional[str] = None
@@ -38,7 +41,10 @@ class AttendanceTodayStatus(BaseModel):
     has_checked_out: bool
     check_in_time: Optional[datetime] = None
     check_out_time: Optional[datetime] = None
+    check_in: Optional[str] = None
+    check_out: Optional[str] = None
     working_hours: float = 0.0
+    total_hours: float = 0.0
     status: Optional[str] = None
 
 class MonthlyAttendanceSummary(BaseModel):

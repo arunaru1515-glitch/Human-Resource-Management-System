@@ -1,0 +1,545 @@
+{
+  "info": {
+    "_postman_id": "c1f7a4d5-8299-4c0a-9d21-4f11e9a3b652",
+    "name": "Enterprise HRMS API Collection",
+    "description": "Comprehensive Postman Collection for Enterprise Human Resource Management System (FastAPI Backend, JWT RBAC, SQLite/MySQL, ReportLab PDF, CSV Exports).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login - Admin (Auto Sets Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.access_token) {",
+                  "    pm.collectionVariables.set('token', jsonData.access_token);",
+                  "    console.log('Saved Admin Token to collection variable');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@hrms.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login - HR Manager",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.access_token) {",
+                  "    pm.collectionVariables.set('token', jsonData.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"hr@hrms.com\",\n  \"password\": \"hr123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Login - Employee (Shyam)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.access_token) {",
+                  "    pm.collectionVariables.set('token', jsonData.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"shyam@hrms.com\",\n  \"password\": \"shyam123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User Profile (/me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Employee Management",
+      "item": [
+        {
+          "name": "List All Employees",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/employees",
+              "host": ["{{base_url}}"],
+              "path": ["employees"]
+            }
+          }
+        },
+        {
+          "name": "Onboard New Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Kavita Raman\",\n  \"email\": \"kavita@hrms.com\",\n  \"password\": \"kavita123\",\n  \"role\": \"EMPLOYEE\",\n  \"department\": \"Engineering\",\n  \"designation\": \"Backend Engineer\",\n  \"base_salary\": 65000,\n  \"joining_date\": \"2025-02-01\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/employees",
+              "host": ["{{base_url}}"],
+              "path": ["employees"]
+            }
+          }
+        },
+        {
+          "name": "Deactivate Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/employees/4",
+              "host": ["{{base_url}}"],
+              "path": ["employees", "4"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Attendance Management",
+      "item": [
+        {
+          "name": "Get Today's Attendance",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/attendance/today",
+              "host": ["{{base_url}}"],
+              "path": ["attendance", "today"]
+            }
+          }
+        },
+        {
+          "name": "Clock In (Check-In)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{base_url}}/attendance/check-in",
+              "host": ["{{base_url}}"],
+              "path": ["attendance", "check-in"]
+            }
+          }
+        },
+        {
+          "name": "Clock Out (Check-Out)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{base_url}}/attendance/check-out",
+              "host": ["{{base_url}}"],
+              "path": ["attendance", "check-out"]
+            }
+          }
+        },
+        {
+          "name": "Attendance History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/attendance/history",
+              "host": ["{{base_url}}"],
+              "path": ["attendance", "history"]
+            }
+          }
+        },
+        {
+          "name": "Admin Attendance Override",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee_id\": 3,\n  \"date\": \"2026-10-13\",\n  \"check_in\": \"2026-10-13T09:00:00\",\n  \"check_out\": \"2026-10-13T18:00:00\",\n  \"status\": \"PRESENT\",\n  \"remarks\": \"Approved site client meeting\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/attendance/override",
+              "host": ["{{base_url}}"],
+              "path": ["attendance", "override"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Leave Management",
+      "item": [
+        {
+          "name": "Get Leave Quota & Balances",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/leaves/balance",
+              "host": ["{{base_url}}"],
+              "path": ["leaves", "balance"]
+            }
+          }
+        },
+        {
+          "name": "Apply for Leave",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leave_type\": \"CASUAL\",\n  \"start_date\": \"2026-10-20\",\n  \"end_date\": \"2026-10-21\",\n  \"reason\": \"Family function\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/leaves/apply",
+              "host": ["{{base_url}}"],
+              "path": ["leaves", "apply"]
+            }
+          }
+        },
+        {
+          "name": "List Leave Requests",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/leaves",
+              "host": ["{{base_url}}"],
+              "path": ["leaves"]
+            }
+          }
+        },
+        {
+          "name": "Review Leave (Approve / Reject)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\",\n  \"comment\": \"Approved by HR\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/leaves/1/review",
+              "host": ["{{base_url}}"],
+              "path": ["leaves", "1", "review"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Payroll & Salary Slips",
+      "item": [
+        {
+          "name": "Process Monthly Payroll",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"month\": 10,\n  \"year\": 2026\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/payroll/generate",
+              "host": ["{{base_url}}"],
+              "path": ["payroll", "generate"]
+            }
+          }
+        },
+        {
+          "name": "List Payroll Records",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/payroll?month=10&year=2026",
+              "host": ["{{base_url}}"],
+              "path": ["payroll"],
+              "query": [
+                { "key": "month", "value": "10" },
+                { "key": "year", "value": "2026" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Simulate Salary Credit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/payroll/1/simulate-credit",
+              "host": ["{{base_url}}"],
+              "path": ["payroll", "1", "simulate-credit"]
+            }
+          }
+        },
+        {
+          "name": "Lock Payroll Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/payroll/1/lock",
+              "host": ["{{base_url}}"],
+              "path": ["payroll", "1", "lock"]
+            }
+          }
+        },
+        {
+          "name": "List Salary Slips",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/salary-slips",
+              "host": ["{{base_url}}"],
+              "path": ["salary-slips"]
+            }
+          }
+        },
+        {
+          "name": "Download PDF Salary Slip",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/salary-slips/1/download",
+              "host": ["{{base_url}}"],
+              "path": ["salary-slips", "1", "download"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Reports & Analytics",
+      "item": [
+        {
+          "name": "Dashboard Summary Metrics",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reports/dashboard-summary",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "dashboard-summary"]
+            }
+          }
+        },
+        {
+          "name": "Export Attendance CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reports/attendance/export?start_date=2026-10-01&end_date=2026-10-31",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "attendance", "export"],
+              "query": [
+                { "key": "start_date", "value": "2026-10-01" },
+                { "key": "end_date", "value": "2026-10-31" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Export Leaves CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reports/leaves/export",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "leaves", "export"]
+            }
+          }
+        },
+        {
+          "name": "Export Payroll CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/reports/payroll/export?month=10&year=2026",
+              "host": ["{{base_url}}"],
+              "path": ["reports", "payroll", "export"],
+              "query": [
+                { "key": "month", "value": "10" },
+                { "key": "year", "value": "2026" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Audit Logs & System Notifications",
+      "item": [
+        {
+          "name": "Get Audit Trail (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/audit-logs",
+              "host": ["{{base_url}}"],
+              "path": ["audit-logs"]
+            }
+          }
+        },
+        {
+          "name": "Get Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["notifications"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

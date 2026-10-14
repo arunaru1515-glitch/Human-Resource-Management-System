@@ -54,19 +54,26 @@ def get_leave_balance(
         db.commit()
         db.refresh(balance)
 
+    casual_rem = max(0.0, balance.casual_allocated - balance.casual_used)
+    sick_rem = max(0.0, balance.sick_allocated - balance.sick_used)
+    paid_rem = max(0.0, balance.paid_allocated - balance.paid_used)
     return LeaveBalanceResponse(
         employee_id=balance.employee_id,
         year=balance.year,
         casual_allocated=balance.casual_allocated,
         casual_used=balance.casual_used,
-        casual_available=max(0.0, balance.casual_allocated - balance.casual_used),
+        casual_available=casual_rem,
+        casual_leave_remaining=casual_rem,
         sick_allocated=balance.sick_allocated,
         sick_used=balance.sick_used,
-        sick_available=max(0.0, balance.sick_allocated - balance.sick_used),
+        sick_available=sick_rem,
+        sick_leave_remaining=sick_rem,
         paid_allocated=balance.paid_allocated,
         paid_used=balance.paid_used,
-        paid_available=max(0.0, balance.paid_allocated - balance.paid_used),
-        lop_days=balance.lop_days
+        paid_available=paid_rem,
+        paid_leave_remaining=paid_rem,
+        lop_days=balance.lop_days,
+        unpaid_leave_taken=balance.lop_days
     )
 
 @router.post("/apply", response_model=LeaveResponse, status_code=status.HTTP_201_CREATED)
@@ -157,6 +164,7 @@ def apply_leave(
         start_date=new_leave.start_date,
         end_date=new_leave.end_date,
         total_days=new_leave.total_days,
+        days=new_leave.total_days,
         reason=new_leave.reason,
         status=new_leave.status,
         is_lop=new_leave.is_lop,
@@ -201,6 +209,7 @@ def list_leaves(
             start_date=lr.start_date,
             end_date=lr.end_date,
             total_days=lr.total_days,
+            days=lr.total_days,
             reason=lr.reason,
             status=lr.status,
             is_lop=lr.is_lop,
@@ -319,6 +328,7 @@ def review_leave_request(
         start_date=leave_req.start_date,
         end_date=leave_req.end_date,
         total_days=leave_req.total_days,
+        days=leave_req.total_days,
         reason=leave_req.reason,
         status=leave_req.status,
         is_lop=leave_req.is_lop,

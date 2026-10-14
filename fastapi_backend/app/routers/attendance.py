@@ -51,12 +51,17 @@ def get_today_attendance_status(
             status=None
         )
 
+    cin_str = record.check_in_time.isoformat() if record.check_in_time else None
+    cout_str = record.check_out_time.isoformat() if record.check_out_time else None
     return AttendanceTodayStatus(
         has_checked_in=record.check_in_time is not None,
         has_checked_out=record.check_out_time is not None,
         check_in_time=record.check_in_time,
         check_out_time=record.check_out_time,
+        check_in=cin_str,
+        check_out=cout_str,
         working_hours=record.working_hours,
+        total_hours=record.working_hours,
         status=record.status.value
     )
 
@@ -109,6 +114,8 @@ def check_in(
         user=current_user
     )
 
+    cin_str = attendance.check_in_time.isoformat() if attendance.check_in_time else None
+    cout_str = attendance.check_out_time.isoformat() if attendance.check_out_time else None
     return AttendanceResponse(
         id=attendance.id,
         employee_id=emp.id,
@@ -118,7 +125,10 @@ def check_in(
         date=attendance.date,
         check_in_time=attendance.check_in_time,
         check_out_time=attendance.check_out_time,
+        check_in=cin_str,
+        check_out=cout_str,
         working_hours=attendance.working_hours,
+        total_hours=attendance.working_hours,
         status=attendance.status,
         is_override=attendance.is_override,
         override_reason=attendance.override_reason
@@ -172,6 +182,8 @@ def check_out(
         user=current_user
     )
 
+    cin_str = attendance.check_in_time.isoformat() if attendance.check_in_time else None
+    cout_str = attendance.check_out_time.isoformat() if attendance.check_out_time else None
     return AttendanceResponse(
         id=attendance.id,
         employee_id=emp.id,
@@ -181,7 +193,10 @@ def check_out(
         date=attendance.date,
         check_in_time=attendance.check_in_time,
         check_out_time=attendance.check_out_time,
+        check_in=cin_str,
+        check_out=cout_str,
         working_hours=attendance.working_hours,
+        total_hours=attendance.working_hours,
         status=attendance.status,
         is_override=attendance.is_override,
         override_reason=attendance.override_reason
@@ -216,6 +231,8 @@ def get_attendance_history(
     records = query.order_by(Attendance.date.desc()).all()
     results = []
     for r in records:
+        cin_str = r.check_in_time.isoformat() if r.check_in_time else None
+        cout_str = r.check_out_time.isoformat() if r.check_out_time else None
         results.append(AttendanceResponse(
             id=r.id,
             employee_id=r.employee_id,
@@ -225,7 +242,10 @@ def get_attendance_history(
             date=r.date,
             check_in_time=r.check_in_time,
             check_out_time=r.check_out_time,
+            check_in=cin_str,
+            check_out=cout_str,
             working_hours=r.working_hours,
+            total_hours=r.working_hours,
             status=r.status,
             is_override=r.is_override,
             override_reason=r.override_reason

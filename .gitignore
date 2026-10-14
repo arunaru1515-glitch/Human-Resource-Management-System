@@ -54,3 +54,7 @@ fastapi_backend/media/salary_slips/
 # Database Backups
 *.sql.bak
 *.sqlite3.bak
+
+# HRMS database files
+fastapi_backend/hrms.db
+database/hrms_dump.sql

@@ -57,6 +57,7 @@ class SalarySlipResponse(BaseModel):
     year: int
     file_name: str
     file_path: str
+    net_salary: Optional[float] = None
     download_count: int
     generated_at: datetime
 

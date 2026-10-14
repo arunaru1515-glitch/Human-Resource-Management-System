@@ -24,6 +24,7 @@ class LeaveResponse(BaseModel):
     start_date: date
     end_date: date
     total_days: float
+    days: Optional[float] = None
     reason: str
     status: LeaveStatus
     is_lop: bool
@@ -41,13 +42,17 @@ class LeaveBalanceResponse(BaseModel):
     casual_allocated: float
     casual_used: float
     casual_available: float
+    casual_leave_remaining: Optional[float] = None
     sick_allocated: float
     sick_used: float
     sick_available: float
+    sick_leave_remaining: Optional[float] = None
     paid_allocated: float
     paid_used: float
     paid_available: float
+    paid_leave_remaining: Optional[float] = None
     lop_days: float
+    unpaid_leave_taken: Optional[float] = None
 
     class Config:
         from_attributes = True
