@@ -84,14 +84,17 @@ body {
   flex-direction: column;
   min-width: 0;
   background-color: var(--bg-app);
+  min-height: 100vh;
 }
 
 .content-body {
-  padding: 24px 28px;
+  padding: 14px 20px 16px 20px;
   flex: 1;
-  max-width: 1360px;
+  max-width: 1440px;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Sidebar */
@@ -257,13 +260,13 @@ body {
    TOPBAR - CLEAN & PROFESSIONAL LITE THEME (#ffffff)
    ========================================================================== */
 .topbar {
-  height: 76px;
+  height: 60px;
   background-color: #ffffff;
   border-bottom: 2px solid #94a3b8;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px;
+  padding: 0 20px;
   position: sticky;
   top: 0;
   z-index: 90;
@@ -273,13 +276,13 @@ body {
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .topbar-page-iconbox {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
   border: 1px solid #bfdbfe;
   color: #2563eb;
@@ -293,7 +296,7 @@ body {
 .topbar-header-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .topbar-title-row {
@@ -303,7 +306,7 @@ body {
 }
 
 .topbar-title {
-  font-size: 23px;
+  font-size: 19px;
   font-weight: 800;
   color: #1e3a8a;
   letter-spacing: -0.4px;
@@ -531,21 +534,21 @@ body {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
 }
 
 .card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #f1f5f9;
 }
 
 .card-title {
-  font-size: 15.5px;
+  font-size: 14.5px;
   font-weight: 600;
   color: var(--text-main);
   display: flex;
@@ -554,9 +557,9 @@ body {
 }
 
 .card-subtitle {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--text-muted);
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 /* ==========================================================================
@@ -574,23 +577,24 @@ body {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 13px;
+  font-size: 12.5px;
 }
 
 .data-table th {
   background-color: #f8fafc;
   color: var(--text-muted);
   font-weight: 600;
-  padding: 12px 16px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--border-color);
   white-space: nowrap;
 }
 
 .data-table td {
-  padding: 12px 16px;
+  padding: 7px 12px;
   border-bottom: 1px solid #f1f5f9;
   color: var(--text-main);
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 .data-table tbody tr:hover {
@@ -603,7 +607,7 @@ body {
 
 .empty-state {
   text-align: center;
-  padding: 36px 20px;
+  padding: 22px 16px;
   color: var(--text-muted);
 }
 
@@ -652,16 +656,16 @@ body {
 /* KPI Grid */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 18px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .kpi-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 20px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -675,30 +679,30 @@ body {
 }
 
 .kpi-meta p {
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .kpi-value {
-  font-size: 26px;
+  font-size: 21px;
   font-weight: 700;
   color: var(--text-main);
   line-height: 1.1;
 }
 
 .kpi-subtitle {
-  font-size: 11.5px;
+  font-size: 11px;
   color: var(--text-light);
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .kpi-icon {
-  width: 48px;
-  height: 48px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;

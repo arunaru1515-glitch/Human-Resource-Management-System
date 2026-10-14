@@ -102,17 +102,14 @@ Human Resource Management System/
 
 ---
 
-## 🔑 Test Accounts & Sample Credentials
+## 🔑 User Roles & Access Control
 
-The database comes pre-seeded with active accounts across all user roles:
+The system supports three distinct access tiers with strict role-based access control (RBAC):
+- **Administrator**: System administration, user account management, and full operational control.
+- **HR Manager**: Employee onboarding, leave reviews, attendance oversight, and monthly payroll processing.
+- **Employee**: Self-service portal for live clock-in/out, leave applications, attendance history, and salary slip downloads.
 
-| Role | Email | Password | Employee Code | Department |
-| :--- | :--- | :--- | :--- | :--- |
-| **Administrator** | `admin@hrms.com` | `admin123` | `EMP-001` | Executive |
-| **HR Manager** | `hr@hrms.com` | `hr123` | `EMP-002` | Human Resources |
-| **Employee** | `shyam@hrms.com` | `shyam123` | `EMP-004` | Engineering |
-
-*Tip: The login page includes quick sign-in buttons to switch between accounts with a single click.*
+> ℹ️ *Note: For security best practices, account credentials should be managed via environment variables or provided privately during evaluation submission.*
 
 ---
 
@@ -133,7 +130,6 @@ cd "Human Resource Management System\django_admin"
 python manage.py runserver 8080
 ```
 - Django Admin URL: [http://localhost:8080/admin](http://localhost:8080/admin)
-- Superuser Credentials: `admin` / `admin123`
 
 ### 3. Start the Frontend (Port 3000)
 ```powershell
