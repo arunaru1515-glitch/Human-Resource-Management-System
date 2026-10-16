@@ -11,6 +11,10 @@ from .models import (
     SharedSalarySlip,
     SharedAuditLog,
     SharedNotification,
+    SharedHoliday,
+    SharedShift,
+    SharedEmployeeShift,
+    SharedSalaryComponent,
 )
 
 from django.contrib.auth.models import Group
@@ -157,3 +161,32 @@ class NotificationAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'notification_type', 'is_read', 'email_sent', 'created_at')
     list_filter = ('notification_type', 'is_read', 'email_sent', 'created_at')
     search_fields = ('title', 'message', 'email_recipient')
+
+
+@admin.register(SharedHoliday)
+class HolidayAdmin(admin.ModelAdmin):
+    list_display = ('name', 'date', 'holiday_type', 'region', 'is_active', 'created_at')
+    list_filter = ('holiday_type', 'is_active', 'region', 'date')
+    search_fields = ('name', 'description', 'region')
+
+
+@admin.register(SharedShift)
+class ShiftAdmin(admin.ModelAdmin):
+    list_display = ('name', 'shift_type', 'start_time', 'end_time', 'grace_minutes', 'overtime_after_hours', 'is_active')
+    list_filter = ('shift_type', 'is_active')
+    search_fields = ('name', 'description')
+
+
+@admin.register(SharedEmployeeShift)
+class EmployeeShiftAdmin(admin.ModelAdmin):
+    list_display = ('employee', 'shift', 'effective_from', 'effective_to', 'notes', 'created_at')
+    list_filter = ('shift', 'effective_from')
+    search_fields = ('employee__employee_code', 'employee__first_name', 'employee__last_name', 'notes')
+
+
+@admin.register(SharedSalaryComponent)
+class SalaryComponentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'component_type', 'amount', 'percentage', 'is_percentage', 'is_variable', 'is_active')
+    list_filter = ('component_type', 'is_percentage', 'is_variable', 'is_active')
+    search_fields = ('name', 'description')
+

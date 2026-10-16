@@ -8,7 +8,10 @@ import {
   FileSpreadsheet, 
   ShieldCheck, 
   UserCheck, 
-  LogOut 
+  LogOut,
+  Globe,
+  Clock4,
+  DollarSign
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -105,14 +108,48 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           <span>Payroll & Slips</span>
         </button>
 
+        {/* ── New Phase 2 Modules ── */}
+        <div className="sidebar-section-label">Workforce</div>
+
+        <button
+          className={`sidebar-link ${activeTab === 'holidays' ? 'active' : ''}`}
+          onClick={() => setActiveTab('holidays')}
+        >
+          <Globe size={18} />
+          <span>Holidays & Calendar</span>
+        </button>
+
         {isHrOrAdmin && (
-          <button 
-            className={`sidebar-link ${activeTab === 'reports' ? 'active' : ''}`}
-            onClick={() => setActiveTab('reports')}
+          <button
+            className={`sidebar-link ${activeTab === 'shifts' ? 'active' : ''}`}
+            onClick={() => setActiveTab('shifts')}
           >
-            <FileSpreadsheet size={18} />
-            <span>Reports & Export</span>
+            <Clock4 size={18} />
+            <span>Shift Management</span>
           </button>
+        )}
+
+        {isHrOrAdmin && (
+          <button
+            className={`sidebar-link ${activeTab === 'salary-components' ? 'active' : ''}`}
+            onClick={() => setActiveTab('salary-components')}
+          >
+            <DollarSign size={18} />
+            <span>Salary Components</span>
+          </button>
+        )}
+
+        {isHrOrAdmin && (
+          <>
+            <div className="sidebar-section-label">System</div>
+            <button 
+              className={`sidebar-link ${activeTab === 'reports' ? 'active' : ''}`}
+              onClick={() => setActiveTab('reports')}
+            >
+              <FileSpreadsheet size={18} />
+              <span>Reports & Export</span>
+            </button>
+          </>
         )}
 
         {isAdmin && (

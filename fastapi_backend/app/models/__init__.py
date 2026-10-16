@@ -6,6 +6,9 @@ from app.models.leave import LeaveRequest, LeaveBalance, LeaveType, LeaveStatus
 from app.models.payroll import Payroll, SalarySlip, PayrollStatus
 from app.models.notification import Notification, NotificationType
 from app.models.audit_log import AuditLog
+from app.models.holiday import Holiday, HolidayType
+from app.models.shift import Shift, EmployeeShift, ShiftType
+from app.models.salary_component import SalaryComponent, ComponentType
 
 __all__ = [
     "Base",
@@ -25,4 +28,11 @@ __all__ = [
     "Notification",
     "NotificationType",
     "AuditLog",
+    "Holiday",
+    "HolidayType",
+    "Shift",
+    "EmployeeShift",
+    "ShiftType",
+    "SalaryComponent",
+    "ComponentType",
 ]

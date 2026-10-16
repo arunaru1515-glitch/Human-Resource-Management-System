@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.models.user import User, Employee, UserRole
 from app.models.attendance import Attendance, AttendanceStatus
+from app.models.shift import EmployeeShift, Shift
 from app.schemas.attendance import (
     AttendanceCheckIn, AttendanceCheckOut, AttendanceOverride,
     AttendanceResponse, AttendanceTodayStatus, MonthlyAttendanceSummary
@@ -89,12 +90,40 @@ def check_in(
         )
 
     if not existing:
+        # Resolve active shift for this employee
+        now_dt = datetime.utcnow()
+        active_shift_assignment = db.query(EmployeeShift).filter(
+            EmployeeShift.employee_id == emp.id,
+            EmployeeShift.effective_from <= now_dt,
+            (EmployeeShift.effective_to == None) | (EmployeeShift.effective_to >= now_dt)
+        ).order_by(EmployeeShift.effective_from.desc()).first()
+
+        shift_id = None
+        is_late = False
+        late_minutes = 0
+        if active_shift_assignment:
+            shift = active_shift_assignment.shift
+            shift_id = shift.id
+            expected_start = datetime.combine(today, shift.start_time)
+            grace_end = expected_start.replace(
+                minute=expected_start.minute + shift.grace_minutes
+            ) if expected_start.minute + shift.grace_minutes < 60 else expected_start.replace(
+                hour=expected_start.hour + (expected_start.minute + shift.grace_minutes) // 60,
+                minute=(expected_start.minute + shift.grace_minutes) % 60
+            )
+            if now > grace_end:
+                is_late = True
+                late_minutes = int((now - expected_start).total_seconds() / 60)
+
         attendance = Attendance(
             employee_id=emp.id,
             date=today,
             check_in_time=now,
             status=AttendanceStatus.PRESENT,
-            working_hours=0.0
+            working_hours=0.0,
+            shift_id=shift_id,
+            is_late=is_late,
+            late_minutes=late_minutes
         )
         db.add(attendance)
     else:
@@ -163,6 +192,26 @@ def check_out(
     delta_seconds = (now - attendance.check_in_time).total_seconds()
     hours = round(max(0.0, delta_seconds / 3600.0), 2)
     attendance.working_hours = hours
+
+    # Compute overtime and early checkout vs shift
+    overtime_hours = 0.0
+    is_early_checkout = False
+    if attendance.shift_id:
+        shift = db.query(Shift).filter(Shift.id == attendance.shift_id).first()
+        if shift:
+            expected_end = datetime.combine(today, shift.end_time)
+            if now < expected_end:
+                is_early_checkout = True
+            overtime_threshold = datetime.combine(today, shift.start_time)
+            overtime_threshold = overtime_threshold.replace(
+                hour=(overtime_threshold.hour + int(shift.overtime_after_hours)) % 24
+            )
+            if now > overtime_threshold and not is_early_checkout:
+                ot_seconds = (now - overtime_threshold).total_seconds()
+                overtime_hours = round(max(0.0, ot_seconds / 3600.0), 2)
+
+    attendance.overtime_hours = overtime_hours
+    attendance.is_early_checkout = is_early_checkout
 
     # Half-day rule: If less than 4 hours, mark as HALF_DAY
     if hours < 4.0:

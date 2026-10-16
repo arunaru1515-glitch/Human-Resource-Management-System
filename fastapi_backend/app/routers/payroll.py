@@ -24,9 +24,11 @@ def compute_employee_payroll(
     month: int,
     year: int,
     db: Session,
-    total_working_days: int = 30
+    total_working_days: int = 30,
+    bonus: float = 0.0,
+    performance_allowance: float = 0.0
 ) -> dict:
-    """Calculate attendance, LOP, earnings, and deductions for an employee."""
+    """Calculate attendance, LOP, shift overtime, earnings, and deductions for an employee."""
     start_dt = date(year, month, 1)
     end_dt = date(year, month, 28)  # Approximate month boundary
 
@@ -55,14 +57,21 @@ def compute_employee_payroll(
     absent_days = sum(1.0 for a in attendances if a.status == AttendanceStatus.ABSENT)
     lop_days += absent_days
 
+    # Overtime pay: sum of overtime_hours across all attendance records
+    total_overtime_hours = sum(a.overtime_hours for a in attendances)
+    hourly_rate = (emp.basic_salary + emp.hra + emp.allowances) / max(total_working_days * 8, 1)
+    overtime_pay = round(total_overtime_hours * hourly_rate * 1.5, 2)  # 1.5x multiplier
+
     # Daily rate
     daily_rate = (emp.basic_salary + emp.hra + emp.allowances) / max(total_working_days, 1)
     lop_deduction = round(lop_days * daily_rate, 2)
 
-    gross_salary = round(emp.basic_salary + emp.hra + emp.allowances, 2)
+    gross_salary = round(emp.basic_salary + emp.hra + emp.allowances + bonus + overtime_pay + performance_allowance, 2)
     tax_deduction = round(gross_salary * 0.05, 2)  # Standard 5% TDS
+    pf_deduction = round(emp.basic_salary * 0.12, 2)  # 12% PF on basic
+    professional_tax = 200.0  # Fixed professional tax
     other_deductions = round(emp.deductions, 2)
-    total_deductions = round(lop_deduction + tax_deduction + other_deductions, 2)
+    total_deductions = round(lop_deduction + tax_deduction + pf_deduction + professional_tax + other_deductions, 2)
     net_salary = max(0.0, round(gross_salary - total_deductions, 2))
 
     return {
@@ -73,9 +82,14 @@ def compute_employee_payroll(
         "basic_salary": emp.basic_salary,
         "hra": emp.hra,
         "allowances": emp.allowances,
+        "bonus": bonus,
+        "overtime_pay": overtime_pay,
+        "performance_allowance": performance_allowance,
         "gross_salary": gross_salary,
         "lop_deduction": lop_deduction,
         "tax_deduction": tax_deduction,
+        "pf_deduction": pf_deduction,
+        "professional_tax": professional_tax,
         "other_deductions": other_deductions,
         "total_deductions": total_deductions,
         "net_salary": net_salary
@@ -108,7 +122,9 @@ def generate_monthly_payroll(
             results.append(existing)
             continue
 
-        calc = compute_employee_payroll(emp, req.month, req.year, db)
+        calc = compute_employee_payroll(emp, req.month, req.year, db,
+                                        bonus=getattr(req, 'bonus', 0.0),
+                                        performance_allowance=getattr(req, 'performance_allowance', 0.0))
 
         if not existing:
             payroll = Payroll(
@@ -188,9 +204,14 @@ def generate_monthly_payroll(
             basic_salary=p.basic_salary,
             hra=p.hra,
             allowances=p.allowances,
+            bonus=getattr(p, 'bonus', 0.0),
+            overtime_pay=getattr(p, 'overtime_pay', 0.0),
+            performance_allowance=getattr(p, 'performance_allowance', 0.0),
             gross_salary=p.gross_salary,
             lop_deduction=p.lop_deduction,
             tax_deduction=p.tax_deduction,
+            pf_deduction=getattr(p, 'pf_deduction', 0.0),
+            professional_tax=getattr(p, 'professional_tax', 0.0),
             other_deductions=p.other_deductions,
             total_deductions=p.total_deductions,
             net_salary=p.net_salary,

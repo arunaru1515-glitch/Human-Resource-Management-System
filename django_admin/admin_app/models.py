@@ -244,3 +244,90 @@ class SharedNotification(models.Model):
 
     def __str__(self):
         return f"{self.title} to {self.user.email}"
+
+
+class SharedHoliday(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=200)
+    date = models.DateField()
+    holiday_type = models.CharField(max_length=50)
+    description = models.TextField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    region = models.CharField(max_length=100, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'holidays'
+        verbose_name = 'Holiday'
+        verbose_name_plural = 'Holidays'
+
+    def __str__(self):
+        return f"{self.name} ({self.date}) - {self.holiday_type}"
+
+
+class SharedShift(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
+    shift_type = models.CharField(max_length=50)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    grace_minutes = models.IntegerField(default=15)
+    overtime_after_hours = models.FloatField(default=8.0)
+    description = models.TextField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'shifts'
+        verbose_name = 'Work Shift'
+        verbose_name_plural = 'Work Shifts'
+
+    def __str__(self):
+        return f"{self.name} ({self.start_time} - {self.end_time})"
+
+
+class SharedEmployeeShift(models.Model):
+    id = models.IntegerField(primary_key=True)
+    employee = models.ForeignKey(SharedEmployee, on_delete=models.DO_NOTHING, db_column='employee_id')
+    shift = models.ForeignKey(SharedShift, on_delete=models.DO_NOTHING, db_column='shift_id')
+    effective_from = models.DateTimeField()
+    effective_to = models.DateTimeField(null=True, blank=True)
+    assigned_by_id = models.IntegerField(null=True, blank=True)
+    notes = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = False
+        db_table = 'employee_shifts'
+        verbose_name = 'Employee Shift Assignment'
+        verbose_name_plural = 'Employee Shift Assignments'
+
+    def __str__(self):
+        return f"{self.employee.employee_code} -> {self.shift.name}"
+
+
+class SharedSalaryComponent(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=100)
+    component_type = models.CharField(max_length=50)
+    description = models.TextField(null=True, blank=True)
+    is_percentage = models.BooleanField(default=False)
+    amount = models.FloatField(default=0.0)
+    percentage = models.FloatField(default=0.0)
+    is_variable = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'salary_components'
+        verbose_name = 'Salary Component'
+        verbose_name_plural = 'Salary Components'
+
+    def __str__(self):
+        return f"{self.name} ({self.component_type})"

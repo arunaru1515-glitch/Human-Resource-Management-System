@@ -42,7 +42,10 @@ from app.routers import (
     salary_slips,
     reports,
     notifications,
-    audit_logs
+    audit_logs,
+    holidays,
+    shifts,
+    salary_components
 )
 
 app.include_router(auth.router, prefix=settings.API_V1_STR)
@@ -54,6 +57,9 @@ app.include_router(salary_slips.router, prefix=settings.API_V1_STR)
 app.include_router(reports.router, prefix=settings.API_V1_STR)
 app.include_router(notifications.router, prefix=settings.API_V1_STR)
 app.include_router(audit_logs.router, prefix=settings.API_V1_STR)
+app.include_router(holidays.router, prefix=settings.API_V1_STR)
+app.include_router(shifts.router, prefix=settings.API_V1_STR)
+app.include_router(salary_components.router, prefix=settings.API_V1_STR)
 
 @app.get("/", tags=["Health Check"])
 def root():

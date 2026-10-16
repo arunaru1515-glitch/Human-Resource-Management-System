@@ -7,11 +7,18 @@ class PayrollGenerateRequest(BaseModel):
     month: int  # 1-12
     year: int
     employee_id: Optional[int] = None  # None means generate for all active employees
+    bonus: Optional[float] = 0.0
+    performance_allowance: Optional[float] = 0.0
 
 class PayrollAdjustRequest(BaseModel):
     lop_days: Optional[float] = None
     allowances: Optional[float] = None
+    bonus: Optional[float] = None
+    overtime_pay: Optional[float] = None
+    performance_allowance: Optional[float] = None
     tax_deduction: Optional[float] = None
+    pf_deduction: Optional[float] = None
+    professional_tax: Optional[float] = None
     other_deductions: Optional[float] = None
     notes: Optional[str] = None
 
@@ -27,12 +34,19 @@ class PayrollResponse(BaseModel):
     present_days: float
     approved_leave_days: float
     lop_days: float
+    # Earnings
     basic_salary: float
     hra: float
     allowances: float
+    bonus: float = 0.0
+    overtime_pay: float = 0.0
+    performance_allowance: float = 0.0
     gross_salary: float
+    # Deductions
     lop_deduction: float
     tax_deduction: float
+    pf_deduction: float = 0.0
+    professional_tax: float = 0.0
     other_deductions: float
     total_deductions: float
     net_salary: float

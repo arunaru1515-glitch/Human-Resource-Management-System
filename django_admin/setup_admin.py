@@ -22,9 +22,10 @@ def setup_django():
         User.objects.create_superuser(username=username, email=email, password=password)
         print("Django superuser created successfully!")
     else:
-        user.email = email
-        user.set_password(password)
-        user.save()
+        existing_user = User.objects.get(username=username)
+        existing_user.email = email
+        existing_user.set_password(password)
+        existing_user.save()
         print("Django superuser updated to admin@hrms.com / admin123.")
 
 if __name__ == '__main__':

@@ -9,9 +9,12 @@ import {
   Banknote, 
   FileSpreadsheet, 
   ShieldCheck, 
-  UserCheck 
+  UserCheck,
+  Globe,
+  Clock4
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import NotificationCenter from './NotificationCenter';
 
 const Navbar = ({ title, subtitle, points = [], activeTab }) => {
   const { currentUser, logout } = useAuth();
@@ -28,6 +31,8 @@ const Navbar = ({ title, subtitle, points = [], activeTab }) => {
       case 'reports': return <FileSpreadsheet size={22} />;
       case 'audit-logs': return <ShieldCheck size={22} />;
       case 'portal': return <UserCheck size={22} />;
+      case 'holidays': return <Globe size={22} />;
+      case 'shifts': return <Clock4 size={22} />;
       default: return <Clock size={22} />;
     }
   };
@@ -63,6 +68,9 @@ const Navbar = ({ title, subtitle, points = [], activeTab }) => {
       </div>
 
       <div className="topbar-right">
+        {/* Notification Center */}
+        <NotificationCenter />
+
         <span className="badge-role">{currentUser.role}</span>
         <button className="btn-topbar-logout" onClick={logout}>
           <LogOut size={14} />

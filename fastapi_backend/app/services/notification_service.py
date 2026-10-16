@@ -35,6 +35,26 @@ TEMPLATES = {
         "title": "Salary Slip Ready for Download",
         "body": "Hello {name},\n\nYour official salary slip for {month}/{year} is now available for download in your employee portal. Net amount credited: ₹{net_salary:,.2f}."
     },
+    NotificationType.ATTENDANCE_ALERT: {
+        "subject": "Attendance Alert",
+        "title": "Attendance Alert",
+        "body": "Hello {name},\n\n{message}"
+    },
+    NotificationType.SHIFT_CHANGE: {
+        "subject": "Shift Assignment Updated: {shift_name}",
+        "title": "Shift Assignment Updated",
+        "body": "Hello {name},\n\nYour work shift has been updated to '{shift_name}' ({shift_type}) — working hours {start_time} to {end_time}. Please plan accordingly."
+    },
+    NotificationType.HOLIDAY_ANNOUNCEMENT: {
+        "subject": "Holiday Announcement: {holiday_name}",
+        "title": "Holiday Announced",
+        "body": "Hello {name},\n\nA {holiday_type} holiday has been announced: {holiday_name} on {holiday_date}."
+    },
+    NotificationType.ADMIN_ANNOUNCEMENT: {
+        "subject": "{title}",
+        "title": "{title}",
+        "body": "{message}"
+    },
     NotificationType.SYSTEM: {
         "subject": "{subject}",
         "title": "{title}",

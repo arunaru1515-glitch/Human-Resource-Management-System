@@ -38,7 +38,7 @@ const api = {
       headers
     });
 
-    if (response.status === 401) {
+    if (response.status === 401 && !endpoint.includes('/auth/login')) {
       this.clearAuth();
       window.dispatchEvent(new CustomEvent('auth:expired'));
       throw new Error('Session expired. Please log in again.');
@@ -236,13 +236,150 @@ const api = {
   },
 
   // Notifications & Audit Logs
-  async getNotifications() {
-    return this.request('/notifications');
+  async getNotifications(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/notifications${query ? '?' + query : ''}`);
   },
 
+  async getUnreadCount() {
+    return this.request('/notifications/unread-count');
+  },
+
+  async markNotificationRead(id) {
+    return this.request(`/notifications/${id}/read`, { method: 'PUT' });
+  },
+
+  async markAllNotificationsRead() {
+    return this.request('/notifications/mark-all-read', { method: 'PUT' });
+  },
+
+  async deleteNotification(id) {
+    return this.request(`/notifications/${id}`, { method: 'DELETE' });
+  },
+
+  async broadcastNotification(data) {
+    return this.request('/notifications/broadcast', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  // Audit Logs
   async getAuditLogs(params = {}) {
     const query = new URLSearchParams(params).toString();
     return this.request(`/audit-logs${query ? '?' + query : ''}`);
+  },
+
+  // Holidays
+  async getHolidays(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/holidays${query ? '?' + query : ''}`);
+  },
+
+  async getHolidayCalendar(year) {
+    return this.request(`/holidays/calendar?year=${year}`);
+  },
+
+  async createHoliday(data) {
+    return this.request('/holidays', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async updateHoliday(id, data) {
+    return this.request(`/holidays/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async deleteHoliday(id) {
+    return this.request(`/holidays/${id}`, { method: 'DELETE' });
+  },
+
+  // Shifts
+  async getShifts(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/shifts${query ? '?' + query : ''}`);
+  },
+
+  async createShift(data) {
+    return this.request('/shifts', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async updateShift(id, data) {
+    return this.request(`/shifts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async deleteShift(id) {
+    return this.request(`/shifts/${id}`, { method: 'DELETE' });
+  },
+
+  async assignShift(data) {
+    return this.request('/shifts/assign', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async getEmployeeShiftHistory(employeeId) {
+    return this.request(`/shifts/employee/${employeeId}/history`);
+  },
+
+  async getShiftAttendanceReport(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/shifts/attendance-report${query ? '?' + query : ''}`);
+  },
+
+  // Salary Components
+  async getSalaryComponents(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/salary-components${query ? '?' + query : ''}`);
+  },
+
+  async createSalaryComponent(data) {
+    return this.request('/salary-components', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async updateSalaryComponent(id, data) {
+    return this.request(`/salary-components/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  },
+
+  async deleteSalaryComponent(id) {
+    return this.request(`/salary-components/${id}`, { method: 'DELETE' });
+  },
+
+  async reviseCompensation(data) {
+    return this.request('/salary-components/revise-compensation', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  },
+
+  // Enhanced Payroll with bonus/performance
+  async generatePayroll(month, year, employeeId = null, bonus = 0, performanceAllowance = 0) {
+    return this.request('/payroll/generate', {
+      method: 'POST',
+      body: JSON.stringify({
+        month, year,
+        employee_id: employeeId,
+        bonus,
+        performance_allowance: performanceAllowance
+      })
+    });
   }
 };
 

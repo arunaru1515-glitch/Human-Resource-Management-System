@@ -11,6 +11,10 @@ class NotificationType(str, enum.Enum):
     LEAVE_REJECTION = "LEAVE_REJECTION"
     PAYROLL_GENERATED = "PAYROLL_GENERATED"
     SALARY_SLIP = "SALARY_SLIP"
+    ATTENDANCE_ALERT = "ATTENDANCE_ALERT"
+    SHIFT_CHANGE = "SHIFT_CHANGE"
+    HOLIDAY_ANNOUNCEMENT = "HOLIDAY_ANNOUNCEMENT"
+    ADMIN_ANNOUNCEMENT = "ADMIN_ANNOUNCEMENT"
     SYSTEM = "SYSTEM"
 
 class Notification(Base):
@@ -23,6 +27,10 @@ class Notification(Base):
     notification_type = Column(Enum(NotificationType), default=NotificationType.SYSTEM, nullable=False)
     is_read = Column(Boolean, default=False, nullable=False)
     
+    # Broadcast fields
+    is_broadcast = Column(Boolean, default=False, nullable=False)
+    department_target = Column(String(100), nullable=True)  # None = all departments
+
     # Template-based email simulation details
     email_sent = Column(Boolean, default=True, nullable=False)
     email_recipient = Column(String(255), nullable=True)

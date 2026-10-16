@@ -31,11 +31,16 @@ class Payroll(Base):
     basic_salary = Column(Float, default=0.0, nullable=False)
     hra = Column(Float, default=0.0, nullable=False)
     allowances = Column(Float, default=0.0, nullable=False)
+    bonus = Column(Float, default=0.0, nullable=False)
+    overtime_pay = Column(Float, default=0.0, nullable=False)
+    performance_allowance = Column(Float, default=0.0, nullable=False)
     gross_salary = Column(Float, default=0.0, nullable=False)
     
     # Deductions
     lop_deduction = Column(Float, default=0.0, nullable=False)
     tax_deduction = Column(Float, default=0.0, nullable=False)
+    pf_deduction = Column(Float, default=0.0, nullable=False)
+    professional_tax = Column(Float, default=0.0, nullable=False)
     other_deductions = Column(Float, default=0.0, nullable=False)
     total_deductions = Column(Float, default=0.0, nullable=False)
     

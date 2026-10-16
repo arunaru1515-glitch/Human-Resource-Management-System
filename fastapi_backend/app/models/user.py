@@ -56,6 +56,7 @@ class Employee(Base):
     leave_balance = relationship("LeaveBalance", back_populates="employee", uselist=False, cascade="all, delete-orphan")
     payrolls = relationship("Payroll", back_populates="employee", cascade="all, delete-orphan")
     salary_slips = relationship("SalarySlip", back_populates="employee", cascade="all, delete-orphan")
+    shift_assignments = relationship("EmployeeShift", back_populates="employee", cascade="all, delete-orphan")
 
     @property
     def full_name(self) -> str:

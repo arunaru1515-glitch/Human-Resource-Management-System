@@ -14,6 +14,9 @@ import Reports from './pages/Reports';
 import AuditLogs from './pages/AuditLogs';
 import EmployeePortal from './pages/EmployeePortal';
 import CheckIn from './pages/CheckIn';
+import Holidays from './pages/Holidays';
+import Shifts from './pages/Shifts';
+import SalaryComponents from './pages/SalaryComponents';
 
 function App() {
   const { currentUser, loading } = useAuth();
@@ -76,8 +79,8 @@ function App() {
     },
     payroll: { 
       title: 'Payroll & Salary Slips', 
-      subtitle: 'Process monthly payroll batches and download PDF salary slips',
-      points: ['Monthly Batches', 'ReportLab PDF Slips', 'Credit Simulation']
+      subtitle: 'Process monthly payroll with advanced earnings & deductions breakdown',
+      points: ['Advanced Computation', 'Bonus & Overtime', 'PDF Slips']
     },
     reports: { 
       title: 'Reports & Analytics', 
@@ -97,7 +100,22 @@ function App() {
     checkin: { 
       title: 'Daily Check-In & Time Tracker', 
       subtitle: 'Biometric time tracker, working hours, and shift logs',
-      points: ['Biometric Tracker', 'Working Hours', 'Shift Logs']
+      points: ['Biometric Tracker', 'Shift Compliance', 'Overtime Tracking']
+    },
+    holidays: {
+      title: 'Holiday & Calendar',
+      subtitle: 'Company-wide holiday calendar with monthly and yearly views',
+      points: ['National Holidays', 'Regional Holidays', 'Optional Holidays']
+    },
+    shifts: {
+      title: 'Shift & Work Schedules',
+      subtitle: 'Define work shifts and manage employee schedule assignments',
+      points: ['Shift Definitions', 'Employee Assignments', 'Attendance Report']
+    },
+    'salary-components': {
+      title: 'Salary Components & Compensation',
+      subtitle: 'Configure earnings/deductions and revise employee compensation',
+      points: ['Pay Components', 'Compensation Revision', 'Audit Logged']
     }
   };
 
@@ -123,6 +141,12 @@ function App() {
         return <EmployeePortal onNavigate={setActiveTab} showToast={showToast} />;
       case 'checkin':
         return <CheckIn showToast={showToast} />;
+      case 'holidays':
+        return <Holidays showToast={showToast} />;
+      case 'shifts':
+        return <Shifts showToast={showToast} />;
+      case 'salary-components':
+        return <SalaryComponents showToast={showToast} />;
       default:
         return <Dashboard onNavigate={setActiveTab} showToast={showToast} />;
     }

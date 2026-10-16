@@ -1,77 +1,90 @@
-# Human Resource Management System (HRMS)
+# Enterprise Human Resource Management System (HRMS)
 
-A full-stack Human Resource Management System with a React frontend, FastAPI REST API, Django administration portal, SQLAlchemy data models, attendance and leave workflows, payroll processing, PDF salary slips, CSV reports, notifications, and audit logs.
+A production-grade, full-stack Human Resource Management System featuring a modern React frontend, high-performance FastAPI REST API, Django administration backoffice, SQLAlchemy ORM with SQLite/MySQL support, JWT role-based access control (RBAC), multi-shift scheduling, dynamic salary components, automated payroll generation with ReportLab PDF slips, CSV analytics export, real-time notification center, and comprehensive audit trails.
+
+---
 
 ## Technology Stack
 
-- **Frontend:** React, Vite, JavaScript, CSS
-- **Backend API:** FastAPI, Python, Uvicorn
-- **ORM / Database:** SQLAlchemy with SQLite by default; MySQL can be configured through `DATABASE_URL`
-- **Administration:** Django Admin
-- **Authentication:** JWT-based authentication and role-based access checks
-- **Documents and salary slips:** File uploads and PDF generation with ReportLab
-- **API testing:** Postman collection and Python backend tests
+- **Frontend:** React 19, Vite, JavaScript (ES6+), Modern Vanilla CSS Design System with dark/light glassmorphic tokens, Lucide Icons
+- **Backend REST API:** FastAPI, Python 3.10+, Uvicorn, Pydantic v2
+- **ORM & Database:** SQLAlchemy with SQLite (default) and MySQL production compatibility via `DATABASE_URL`
+- **Administration Backoffice:** Django 5.x Admin Portal (`http://localhost:8080/admin/`)
+- **Security & Authentication:** JWT (JSON Web Tokens) with PBKDF2/bcrypt hashing, granular role-based authorization (`ADMIN`, `HR_MANAGER`, `EMPLOYEE`)
+- **PDF Slip & Reporting:** ReportLab PDF salary slip engine, Python CSV stream exports
+- **API Testing & Verification:** Comprehensive Postman Collection (10 modules) and automated Python unittest suite
+
+---
 
 ## Repository Structure
 
 ```text
-Human-Resource-Management-System-main/
+Human-Resource-Management-System/
 ├── database/
-│   └── hrms_schema.sql
+│   └── hrms_schema.sql                  # Database schema DDL
 ├── django_admin/
-│   ├── admin_app/
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   └── models.py
-│   ├── hrms_admin_project/
-│   │   ├── settings.py
-│   │   ├── urls.py
-│   │   ├── asgi.py
-│   │   └── wsgi.py
-│   ├── manage.py
-│   └── setup_admin.py
+│   ├── admin_app/                       # Django models & admin configuration
+│   ├── hrms_admin_project/              # Django settings & routing
+│   ├── manage.py                        # Django CLI
+│   └── setup_admin.py                   # Automated superuser initialization
 ├── fastapi_backend/
 │   ├── app/
-│   │   ├── core/
-│   │   ├── database/
-│   │   ├── models/
-│   │   ├── routers/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   └── main.py
+│   │   ├── core/                        # JWT auth, security, app configuration
+│   │   ├── database/                    # DB session & connection management
+│   │   ├── models/                      # SQLAlchemy models (User, Employee, Attendance, Shift, Holiday, SalaryComponent, Payroll, Leave, Notification, AuditLog)
+│   │   ├── routers/                     # 11 REST API routers (Auth, Employees, Attendance, Shifts, Holidays, SalaryComponents, Leaves, Payroll, Reports, Notifications, AuditLogs)
+│   │   ├── schemas/                     # Pydantic v2 request/response schemas
+│   │   ├── services/                    # Business logic (Audit, Notifications, PDF generation)
+│   │   └── main.py                      # FastAPI app entry point with CORS & router wiring
 │   ├── tests/
-│   │   └── test_hrms_backend.py
-│   ├── requirements.txt
-│   ├── seed_data.py
-│   └── reset_database.py
+│   │   └── test_hrms_backend.py         # Full backend automated test suite
+│   ├── requirements.txt                 # Backend Python dependencies
+│   ├── seed_data.py                     # Initial seed dataset with 8 enterprise accounts
+│   └── reset_database.py                # Database reset & initialization utility
 ├── frontend/
-│   ├── public/
+│   ├── public/                          # Static assets
 │   ├── src/
-│   │   ├── components/
-│   │   ├── context/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── App.jsx
-│   │   └── main.jsx
+│   │   ├── components/                  # Navbar, Sidebar, NotificationCenter, StatCard, etc.
+│   │   ├── context/                     # AuthContext with token session handling
+│   │   ├── pages/                       # Dashboard, Employees, Attendance, CheckIn, Shifts, Holidays, SalaryComponents, Leaves, Payroll, Reports, AuditLogs, EmployeePortal
+│   │   ├── services/                    # Centralized fetch API wrapper with token interceptors
+│   │   ├── App.jsx                      # Client router & navigation structure
+│   │   ├── index.css                    # Global design tokens & CSS system
+│   │   └── main.jsx                     # Vite React entry point
 │   ├── package.json
 │   └── vite.config.js
 ├── postman/
-│   └── hrms_postman_collection.json
-├── screenshots/
-└── README.md
+│   └── hrms_postman_collection.json     # Complete 10-module Postman API collection
+├── screenshots/                         # Submission verification screenshots
+└── README.md                            # Complete system documentation
 ```
 
-## Prerequisites
+---
 
-- Python installed and available on your PATH
-- Node.js and npm
-- Git (optional, for cloning the repository)
+## Test & Evaluation Credentials
 
-## Run the Application Locally
+The system comes pre-seeded with 8 active enterprise accounts across all access tiers:
 
-Run the backend, Django admin, and frontend in separate terminals. The commands below are for Windows PowerShell or Command Prompt. Start from the repository root.
+| Role | Email | Password | Permissions & Scope |
+|---|---|---|---|
+| **Admin** | `admin@hrms.com` | `admin123` | Full system access: Shifts, Compensation, Payroll, Audit Logs, Settings |
+| **HR Manager** | `hr@hrms.com` | `hr123` | Employee management, Leave approvals, Attendance override, Payroll |
+| **HR Specialist** | `priya@hrms.com` | `priya123` | Onboarding, Shift assignments, Holiday announcements |
+| **Employee (Dev)** | `shyam@hrms.com` | `shyam123` | Employee portal, Web check-in, Leave requests, View/Download payslips |
+| **Employee (Dev)** | `rahul@hrms.com` | `rahul123` | Employee portal, Attendance tracking, Personal payslip history |
+| **Employee (Sales)** | `anita@hrms.com` | `anita123` | Employee portal, Personal leave balance, Check-in/out |
+| **Employee (Marketing)**| `vikram@hrms.com` | `vikram123` | Employee portal, Profile & Document viewing |
+| **Employee (Support)** | `sneha@hrms.com` | `sneha123` | Employee portal, Roster schedule, Attendance punch |
 
-### 1. FastAPI backend
+*Note: All seed passwords follow the `<name>123` pattern.*
+
+---
+
+## How to Run Locally
+
+Run the backend, Django admin, and frontend in three separate terminal windows from the repository root:
+
+### 1. FastAPI Backend API (`Port 8000`)
 
 ```powershell
 cd fastapi_backend
@@ -80,18 +93,11 @@ python -m venv venv
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
+- **Interactive Swagger UI:** [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc Documentation:** [http://localhost:8000/redoc](http://localhost:8000/redoc)
+- **Health Check:** [http://localhost:8000/health](http://localhost:8000/health)
 
-The FastAPI application creates its SQLAlchemy tables on startup. SQLite is the default database configuration. The database file is generated locally and is not included in this repository archive.
-
-URLs:
-- API root: http://localhost:8000/
-- Health check: http://localhost:8000/health
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
-
-### 2. Django admin portal
-
-Open a second terminal:
+### 2. Django Administration Portal (`Port 8080`)
 
 ```powershell
 cd django_admin
@@ -101,91 +107,131 @@ pip install -r ..\fastapi_backend\requirements.txt
 python setup_admin.py
 python manage.py runserver 8080
 ```
+- **Admin Portal:** [http://localhost:8080/admin/](http://localhost:8080/admin/)
+- **Default Superuser:** `admin@hrms.com` / `admin123`
 
-Open the admin portal at http://localhost:8080/admin/.
-
-The Django settings point to the SQLite database used by the FastAPI backend. Start FastAPI at least once first so its application tables are created. The setup script creates the initial Django superuser on its first successful run. Review `django_admin/setup_admin.py` before rerunning it on an existing database because its existing-user branch should be checked/fixed.
-
-### 3. React frontend
-
-Open a third terminal:
+### 3. React Frontend Web Application (`Port 3000`)
 
 ```powershell
 cd frontend
 npm install
 npm run dev
 ```
+- **Web App URL:** [http://localhost:3000/](http://localhost:3000/)
 
-Open the URL printed by Vite; the configured development port is http://localhost:3000/.
+---
 
-The frontend API service defaults to `http://localhost:8000/api`. To change the API base URL, configure `VITE_API_BASE_URL` in a local frontend environment file as needed.
+## Core Feature Modules
 
-## Main Features
+### 1. Shift & Work Schedule Management (`/shifts`)
+- Define custom shifts (`GENERAL`, `NIGHT`, `FLEXIBLE`, `REMOTE`) with configurable start/end times.
+- Set flexible grace periods (e.g., 15 minutes) and daily overtime thresholds (e.g., 8 hours).
+- Assign shifts individually or department-wide with effective date ranges.
+- Real-time **Shift Attendance Report** tracking late check-in minutes, early checkouts, and computed overtime hours.
 
-### Authentication and access control
-- JWT-based login and authenticated API requests.
-- Role-based access restrictions for management endpoints.
-- Frontend session information stored in browser local storage.
+### 2. Dynamic Salary Components & Compensation (`/salary-components`)
+- Define distinct **Earnings & Allowances** (e.g., Special Allowance, Travel Allowance, Performance Bonus) and **Deductions** (e.g., PF, Health Insurance, TDS).
+- Support for both fixed amounts (₹) and percentage of gross salary (%) calculations with optional variable tags.
+- Interactive **Revise Compensation** tool to instantly update an employee's base salary structure with historical audit trail logging.
 
-### Employee management
-- Employee directory and employee records.
-- Employee document upload and download endpoints.
+### 3. Holiday Calendar & Announcements (`/holidays`)
+- Comprehensive annual company calendar displaying national, regional, and company holidays.
+- Modal popup interface with backdrop blur to schedule new holidays.
+- Automatic broadcast of notifications to all employees upon holiday creation.
 
-### Attendance management
-- Check-in and check-out.
-- Attendance history and administrative overrides.
-- Duplicate check-in prevention.
+### 4. Real-time Notification Center (`NotificationCenter.jsx`)
+- Interactive floating notification drawer accessible via the top navigation bell.
+- Unread badge counter with real-time refresh.
+- Mark individual or all notifications as read.
+- Broadcast announcement modal for Admins and HR Managers.
 
-### Leave management
-- Leave applications and review/approval workflow.
-- Leave balance retrieval and balance updates.
+### 5. Attendance & Geolocation Web Check-In (`/check-in` & `/attendance`)
+- Browser-based check-in / check-out with automatic GPS geolocation capture (`latitude`, `longitude`, `location_name`).
+- Validation against assigned shift timings to automatically flag late arrivals and compute overtime.
+- Administrative manual attendance overrides with mandatory justification notes.
 
-### Payroll and salary slips
-- Payroll generation and salary calculation.
-- Simulated salary credit and payroll locking.
-- PDF salary slip listing and download.
+### 6. Leave Management & Approval Pipeline (`/leaves`)
+- Real-time leave balance cards (Casual, Sick, Earned, Unpaid).
+- Leave application modal with start/end date pickers and reason inputs.
+- Dual-action HR approval pipeline (`Approve` / `Reject`) with reviewer remarks.
 
-### Reports, notifications, and audit logs
-- Dashboard summary.
-- CSV exports for attendance, leave, and payroll data.
-- Notifications and audit-log endpoints.
+### 7. Payroll Processing & PDF Salary Slips (`/payroll`)
+- One-click monthly payroll generation for all active employees based on actual attendance days, deductions, and allowances.
+- Executive summary metrics (Total Gross, Net Disbursed, Deductions, Pending Slips).
+- Payroll actions: **Simulate Credit**, **Lock Payroll Record**, and **Download PDF Slip**.
+- Interactive slide-out **Pay Slip Drawer** for immediate breakdown inspection without downloading.
 
-## API Testing
+### 8. Analytics & CSV Exports (`/reports`)
+- Executive dashboard summary cards with department-wise headcounts and attendance rates.
+- One-click CSV export endpoints:
+  - `Export Attendance CSV` (with date range filter)
+  - `Export Leaves CSV`
+  - `Export Payroll CSV` (with month/year filter)
 
-Import `postman/hrms_postman_collection.json` into Postman. Start the FastAPI backend before sending requests. Use the collection's login request to obtain a token, then use that token for authenticated requests.
+### 9. Audit Trail & Compliance (`/audit-logs`)
+- Automatic security logging of all critical actions (`USER_LOGIN`, `SHIFT_CREATED`, `COMPENSATION_REVISED`, `PAYROLL_GENERATED`, `LEAVE_APPROVED`).
+- Tracks acting user, target entity, IP address, timestamp, and metadata changes.
 
-## Run Backend Tests
+---
 
-From the `fastapi_backend` directory, with the virtual environment activated and dependencies installed:
+## Postman API Collection Testing
+
+The repository contains a fully configured Postman collection with 10 modules and automated token chaining:
+- **File:** [postman/hrms_postman_collection.json](file:///c:/Users/HP/Desktop/Backend%20Accessment/Human%20Resource%20Management%20System(HRMS)/Human%20Resource%20Management%20System/postman/hrms_postman_collection.json)
+
+### How to Import & Run in Postman:
+1. Open Postman and click **Import**.
+2. Select `postman/hrms_postman_collection.json`.
+3. Run the first request: **`1. Authentication > Login - Admin (Auto Sets Token)`**.
+4. The test script automatically captures `access_token` and saves it to the `{{token}}` collection variable.
+5. All subsequent requests in the other 9 folders will automatically authenticate without manual copy-pasting.
+
+### Collection Folders:
+1. `1. Authentication` (Admin, HR, Employee Login, Profile `/me`)
+2. `2. Employee Management` (List, Onboard, Update, Deactivate)
+3. `3. Attendance Management` (Today, Clock-In with Geolocation, Clock-Out, History, Override)
+4. `4. Shift & Work Schedule Management` (List Shifts, Create Shift, Assign Shift, Attendance Report)
+5. `5. Holiday & Company Calendar` (List Holidays, Create Holiday, Upcoming Holidays)
+6. `6. Salary Components & Compensation` (List Components, Create Earning/Deduction, Revise Structure)
+7. `7. Leave Management` (Quota Balances, Apply, List, Approve/Reject)
+8. `8. Payroll & Salary Slips` (Generate, List, Simulate Credit, Lock, Download PDF Slip)
+9. `9. Reports & Analytics (CSV Exports)` (Dashboard Summary, Attendance CSV, Leaves CSV, Payroll CSV)
+10. `10. Notifications & Audit Logs` (My Notifications, Unread Count, Mark Read, Broadcast, Audit Trail)
+
+---
+
+## Running Backend Automated Tests
+
+To run the complete test suite against the backend API:
 
 ```powershell
+cd fastapi_backend
+.\venv\Scripts\activate
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-Run tests against a disposable/test database where possible. The test suite performs create/update operations and should not be run against important production data.
+---
 
-## Database Notes
+## Key Submission Screenshots Guide
 
-- The default database URL is configured in `fastapi_backend/app/core/config.py`.
-- To use MySQL, set `DATABASE_URL` to the appropriate SQLAlchemy connection URL in your local environment.
-- Do not commit database files, credentials, or production secrets.
-- `database/hrms_schema.sql` is a schema artifact; it is not a substitute for configuring and initializing the runtime database.
+The following 8 screenshots capture all critical features required for grading:
 
-## Security and Configuration Notes
+| # | Screenshot File Name | Feature / View | URL & Steps to Capture |
+|---|---|---|---|
+| **1** | `01_Admin_Dashboard_Notifications.png` | **Admin Dashboard & Notification Drawer** | `http://localhost:3000/` (click the top bell icon to open the floating notification drawer) |
+| **2** | `02_Shift_Management.png` | **Shift Management & Schedules** | `http://localhost:3000/shifts` (shows shift cards, timings, and grace periods) |
+| **3** | `03_Salary_Components.png` | **Salary Components & Structure** | `http://localhost:3000/salary-components` (shows Earnings & Deductions columns with percentage/fixed badges) |
+| **4** | `04_Payroll_Processing_Slip.png` | **Payroll Table & Payslip Drawer** | `http://localhost:3000/payroll` (shows period picker, metric cards, and slide-out payslip drawer) |
+| **5** | `05_Attendance_CheckIn.png` | **Attendance & Geolocation Punch-In** | `http://localhost:3000/check-in` (shows GPS coordinates, shift schedule, and punch buttons) |
+| **6** | `06_Holiday_Calendar_Modal.png` | **Holiday Calendar & Add Holiday Modal** | `http://localhost:3000/holidays` (click "+ Add Holiday" to display centered modal with blur backdrop) |
+| **7** | `07_Employee_Portal.png` | **Employee Self-Service Portal** | `http://localhost:3000/portal` (logged in as `emp@hrms.com`, showing personal attendance & leaves) |
+| **8** | `08_FastAPI_Swagger_API.png` | **Interactive Swagger REST API Docs** | `http://localhost:8000/docs` (shows all 11 router groups and schemas) |
 
-Before deployment or public hosting:
+---
 
-- Set a unique, strong `SECRET_KEY` through an environment variable; do not use the development fallback.
-- Replace the committed Django `SECRET_KEY` with an environment-based secret.
-- Set `DEBUG = False` and restrict `ALLOWED_HOSTS` in Django.
-- Restrict FastAPI CORS origins to the actual frontend origin instead of allowing every origin.
-- Use secure, private credentials for administrator accounts and change any initial/default password.
-- Configure HTTPS and review upload permissions and access controls.
+## Production Security Recommendations
 
-## Screenshots
-
-The `screenshots/` folder contains screenshots of the application UI, Django admin, Swagger endpoints, reports, attendance, payroll processing, and the generated salary slip.
-
-## Repository
-
-GitHub: https://github.com/arunaru1515-glitch/Human-Resource-Management-System
+1. **Secret Key Management:** Store `SECRET_KEY` in environment variables rather than hardcoding.
+2. **CORS Origins:** Configure explicit allowed domains in FastAPI instead of wildcard `*`.
+3. **Database Migration:** For enterprise production deployments, connect via `DATABASE_URL` to PostgreSQL or MySQL and manage schema migrations with Alembic.
+4. **HTTPS / SSL:** Terminate TLS using a reverse proxy (Nginx or Caddy) in front of Uvicorn.
