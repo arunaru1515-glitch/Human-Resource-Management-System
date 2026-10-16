@@ -59,24 +59,14 @@ Human-Resource-Management-System/
 └── README.md                            # Complete system documentation
 ```
 
----
+## Role-Based Access Control (RBAC)
 
-## Test & Evaluation Credentials
+The system enforces strict role-based access control across three user tiers:
+- **Administrator (`ADMIN`):** Full system governance, work shift configurations, compensation structure, payroll processing & locking, system notifications, and audit log inspection.
+- **HR Manager (`HR_MANAGER`):** Employee onboarding, department assignment, leave approval workflow, attendance override, and payroll generation.
+- **Employee (`EMPLOYEE`):** Self-service portal access, daily web check-in with GPS geolocation, leave applications, profile viewing, and personal PDF salary slip downloads.
 
-The system comes pre-seeded with 8 active enterprise accounts across all access tiers:
-
-| Role | Email | Password | Permissions & Scope |
-|---|---|---|---|
-| **Admin** | `admin@hrms.com` | `admin123` | Full system access: Shifts, Compensation, Payroll, Audit Logs, Settings |
-| **HR Manager** | `hr@hrms.com` | `hr123` | Employee management, Leave approvals, Attendance override, Payroll |
-| **HR Specialist** | `priya@hrms.com` | `priya123` | Onboarding, Shift assignments, Holiday announcements |
-| **Employee (Dev)** | `shyam@hrms.com` | `shyam123` | Employee portal, Web check-in, Leave requests, View/Download payslips |
-| **Employee (Dev)** | `rahul@hrms.com` | `rahul123` | Employee portal, Attendance tracking, Personal payslip history |
-| **Employee (Sales)** | `anita@hrms.com` | `anita123` | Employee portal, Personal leave balance, Check-in/out |
-| **Employee (Marketing)**| `vikram@hrms.com` | `vikram123` | Employee portal, Profile & Document viewing |
-| **Employee (Support)** | `sneha@hrms.com` | `sneha123` | Employee portal, Roster schedule, Attendance punch |
-
-*Note: All seed passwords follow the `<name>123` pattern.*
+Database initialization and user seeding can be performed via `python seed_data.py` in the `fastapi_backend` directory.
 
 ---
 
@@ -108,7 +98,7 @@ python setup_admin.py
 python manage.py runserver 8080
 ```
 - **Admin Portal:** [http://localhost:8080/admin/](http://localhost:8080/admin/)
-- **Default Superuser:** `admin@hrms.com` / `admin123`
+- **Superuser Access:** Configured during `setup_admin.py` execution.
 
 ### 3. React Frontend Web Application (`Port 3000`)
 
@@ -224,7 +214,7 @@ The following 8 screenshots capture all critical features required for grading:
 | **4** | `04_Payroll_Processing_Slip.png` | **Payroll Table & Payslip Drawer** | `http://localhost:3000/payroll` (shows period picker, metric cards, and slide-out payslip drawer) |
 | **5** | `05_Attendance_CheckIn.png` | **Attendance & Geolocation Punch-In** | `http://localhost:3000/check-in` (shows GPS coordinates, shift schedule, and punch buttons) |
 | **6** | `06_Holiday_Calendar_Modal.png` | **Holiday Calendar & Add Holiday Modal** | `http://localhost:3000/holidays` (click "+ Add Holiday" to display centered modal with blur backdrop) |
-| **7** | `07_Employee_Portal.png` | **Employee Self-Service Portal** | `http://localhost:3000/portal` (logged in as `emp@hrms.com`, showing personal attendance & leaves) |
+| **7** | `07_Employee_Portal.png` | **Employee Self-Service Portal** | `http://localhost:3000/portal` (showing personal employee attendance, leaves, and payslips) |
 | **8** | `08_FastAPI_Swagger_API.png` | **Interactive Swagger REST API Docs** | `http://localhost:8000/docs` (shows all 11 router groups and schemas) |
 
 ---
