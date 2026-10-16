@@ -1,51 +1,43 @@
 
 # Human Resource Management System (HRMS)
 
-## Project Overview
-
-The Human Resource Management System (HRMS) is a full-stack web application designed to simplify employee management and HR operations.
-
-It helps manage employee records, attendance, leave requests, shifts, payroll, salary slips, and reports through a centralized platform.
+A full-stack web application for managing employee records and HR operations, including attendance, leave, shifts, payroll, salary slips, and reports.
 
 ## Technologies Used
 
-- **Frontend:** React, Vite, JavaScript, CSS
-- **Backend:** FastAPI, Python
+- **Frontend:** React 19, Vite 8, JavaScript, CSS, Lucide React
+- **Backend:** Python, FastAPI, Pydantic
 - **Admin Panel:** Django Admin
-- **Database:** SQLAlchemy, SQLite / MySQL
+- **Database:** SQLite, SQLAlchemy (MySQL configuration supported)
 - **Authentication:** JWT
-- **Reports:** PDF and CSV generation
-- **API Testing:** Postman, Swagger UI
+- **PDF Generation:** ReportLab
+- **API Testing:** Swagger UI, Postman
 
-## Main Features
+## Features
 
-- Employee Management
-- Role-Based Access Control
-- Attendance and Check-In / Check-Out
-- Shift Management
-- Leave Application and Approval
-- Holiday Management
-- Payroll Processing
-- Salary Component Management
-- PDF Salary Slip Generation
-- Reports and Data Export
-- Notifications
-- Audit Logs
-- Django Admin Panel
+- Employee management and employee self-service portal
+- Role-based authentication and access control
+- Attendance tracking and check-in/check-out
+- Shift and holiday management
+- Leave applications and approval
+- Payroll processing and PDF salary slips
+- Salary component management
+- Dashboard and notifications
+- CSV reports and data export
+- Audit logs
+- Django administration panel
 
 ## Project Structure
 
 ```text
 Human-Resource-Management-System/
-│
 ├── database/
 │   └── hrms_schema.sql
-│
 ├── django_admin/
 │   ├── admin_app/
 │   ├── hrms_admin_project/
-│   └── manage.py
-│
+│   ├── manage.py
+│   └── setup_admin.py
 ├── fastapi_backend/
 │   ├── app/
 │   │   ├── core/
@@ -57,29 +49,27 @@ Human-Resource-Management-System/
 │   │   └── main.py
 │   ├── tests/
 │   ├── requirements.txt
-│   └── seed_data.py
-│
+│   ├── seed_data.py
+│   └── reset_database.py
 ├── frontend/
 │   ├── public/
 │   ├── src/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
+│   │   └── services/
 │   ├── package.json
 │   └── vite.config.js
-│
 ├── postman/
 ├── screenshots/
 └── README.md
 ```
 
-## Prerequisites
-
-Install the following before running the project:
-
-- Python 3.10 or later
-- Node.js and npm
-- Git
-- A configured database (SQLite or MySQL)
-
 ## Installation and Setup
+
+### Prerequisites
+
+Install Python, Node.js, npm, and Git before starting.
 
 Clone the repository:
 
@@ -88,40 +78,23 @@ git clone https://github.com/arunaru1515-glitch/Human-Resource-Management-System
 cd Human-Resource-Management-System
 ```
 
-### 1. Run the FastAPI Backend
+### 1. Start the FastAPI Backend
 
 Open the first terminal:
 
-```bash
+```powershell
 cd fastapi_backend
 python -m venv venv
-```
-
-Activate the virtual environment on Windows:
-
-```powershell
 .\venv\Scripts\activate
-```
-
-Install dependencies:
-
-```bash
 pip install -r requirements.txt
-```
-
-Start the backend:
-
-```bash
 uvicorn app.main:app --reload --port 8000
 ```
 
-**Backend URL:** http://127.0.0.1:8000
+The backend uses SQLite by default. Database tables are created when the application starts.
 
-**Swagger API Documentation:** http://127.0.0.1:8000/docs
+### 2. Start Django Admin
 
-### 2. Run the Django Admin Panel
-
-Open the second terminal:
+Open the second terminal from the project root:
 
 ```powershell
 cd django_admin
@@ -132,67 +105,66 @@ python setup_admin.py
 python manage.py runserver 8080
 ```
 
-**Django Admin URL:** http://127.0.0.1:8080/admin/
+The setup script initializes the Django database tables and configures the default admin account.
 
-Use the administrator credentials configured during setup.
+**Default Django Admin login**
 
-### 3. Run the React Frontend
+- Username: `admin`
+- Password: `admin123`
 
-Open the third terminal:
+Change default credentials before using the application outside local testing.
 
-```bash
+### 3. Start the React Frontend
+
+Open the third terminal from the project root:
+
+```powershell
 cd frontend
 npm install
 npm run dev
 ```
 
-Open the frontend URL displayed in the terminal. The default Vite URL is usually:
-
-http://localhost:5173
-
-Ensure the frontend API configuration points to the running FastAPI backend.
+Vite runs the frontend on port `3000`, as configured in `vite.config.js`.
 
 ## Application URLs
 
-| Component | URL |
+| Application | URL |
 |---|---|
-| React Frontend | http://localhost:5173 |
-| FastAPI Backend | http://127.0.0.1:8000 |
-| Swagger Documentation | http://127.0.0.1:8000/docs |
-| Django Admin | http://127.0.0.1:8080/admin/ |
+| React Frontend | http://localhost:3000 |
+| FastAPI Backend | http://localhost:8000 |
+| Swagger API Documentation | http://localhost:8000/docs |
+| ReDoc API Documentation | http://localhost:8000/redoc |
+| Backend Health Check | http://localhost:8000/health |
+| Django Admin | http://localhost:8080/admin/ |
+
+## Database Configuration
+
+The backend uses SQLite by default and supports MySQL through the `DATABASE_URL` environment variable.
+
+The Django admin is configured to use the same SQLite database file as the FastAPI backend.
 
 ## API Testing
 
-The FastAPI endpoints can be tested using Swagger UI or Postman.
+Use Swagger UI or the Postman collection in the `postman/` folder to test the API endpoints.
 
 1. Start the FastAPI backend.
-2. Open the Swagger documentation.
-3. Register or log in with a valid account.
-4. Authorize requests when authentication is required.
-5. Test the employee, attendance, leave, payroll, and other available endpoints.
+2. Open [Swagger UI](http://localhost:8000/docs).
+3. Log in using a valid application account.
+4. Authorize requests when required.
+5. Test the available API endpoints.
 
-## Database
+## Running Backend Tests
 
-The application uses SQLAlchemy for database operations and supports SQLite for development and MySQL when configured.
+From the `fastapi_backend` directory, activate the virtual environment and run:
 
-Make sure the database settings and environment variables are configured before starting the backend.
-
-The SQL schema is available in the `database/` directory.
-
-## Testing
-
-Run the backend tests from the `fastapi_backend` directory:
-
-```bash
+```powershell
 python -m unittest discover -s tests
 ```
 
-## Security
+## Screenshots
 
-- Password hashing
-- JWT-based authentication
-- Role-based access control
-- Protected API endpoints
-- Audit logging
+The `screenshots/` folder contains application screenshots, including the dashboard, employee portal, attendance, payroll, Django admin, and Swagger UI.
 
-For production use, configure secure environment variables, strong secret keys, and appropriate database credentials.
+## GitHub Repository
+
+[Human Resource Management System](https://github.com/arunaru1515-glitch/Human-Resource-Management-System)
